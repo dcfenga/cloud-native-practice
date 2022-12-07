@@ -1,0 +1,11 @@
+# virtualmachines-cr.yaml
+apiVersion: "vmcontroller.dcfenga.com/v1"
+kind: VirtualMachine
+metadata:
+  name: vm-cr
+spec:
+  uuid: "2c4789b2-30f2-4d31-ab71-ca115ea8c199"
+  name: "virtual-machine-cr"
+  image: "centos-7.9"
+  memory: 4096
+  disk: 500
