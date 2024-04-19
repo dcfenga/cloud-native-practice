@@ -3,6 +3,8 @@ package main
 import "fmt"
 
 /*
+函数是一块执行特定任务的代码。一个函数是在输入源基础上，通过执行一系列的算法，生成预期的输出。
+
 函数的声明:
 
 		func 函数名(形式参数列表)(返回值列表){
@@ -25,22 +27,6 @@ func sumx(args ...int) int {
 	return sum
 }
 
-// MyPrintf 多个类型不一致的参数,参数个数可变,使用...来接收多个参数
-func MyPrintf(args ...interface{}) {
-	for _, arg := range args {
-		switch arg.(type) {
-		case int:
-			fmt.Println(arg, "is an int value.")
-		case string:
-			fmt.Println(arg, "is a string value.")
-		case int64:
-			fmt.Println(arg, "is an int64 value.")
-		default:
-			fmt.Println(arg, "is an unknown type.")
-		}
-	}
-}
-
 func sumy(args ...int) int {
 	var res int
 	for _, v := range args {
@@ -57,13 +43,29 @@ func Sumy(args ...int) int {
 	return res
 }
 
+// MyPrintf 多个类型不一致的参数,参数个数可变,使用...来接收多个参数
+func MyPrintf(args ...interface{}) {
+	for _, arg := range args {
+		switch arg.(type) {
+		case int:
+			fmt.Println(arg, "is an int value.")
+		case string:
+			fmt.Println(arg, "is a string value.")
+		case int64:
+			fmt.Println(arg, "is an int64 value.")
+		default:
+			fmt.Println(arg, "is an unknown type.")
+		}
+	}
+}
+
 // 返回值1： Go 支持一个函数返回多个值
 func double1(a int) (int, int) {
 	b := a * 3
 	return a, b
 }
 
-// 返回值1： Go支持返回带有变量名的值
+// 返回值2： Go支持返回带有变量名的值
 func double2(a int) (b int) {
 	// 不能使用 := ,因为在返回值哪里已经声明了为int
 	b = a * 3
@@ -85,6 +87,12 @@ func visit(list []int, f func(int)) {
 		// 执行回调函数
 		f(v)
 	}
+}
+
+func rectProps(length, width float64) (float64, float64) {
+	var area = length * width
+	var perimeter = (length + width) * 2
+	return area, perimeter
 }
 
 /*
@@ -122,9 +130,13 @@ func main() {
 	}(100)
 	fmt.Println("-----------------")
 
-	// // 使用匿名函数直接做为参数
+	// 使用匿名函数直接做为参数
 	visit([]int{1, 2, 3, 4, 5}, func(v int) {
 		fmt.Println(v)
 	})
 	fmt.Println("-----------------")
+
+	// 空白符，可以用作表示任何类型的任何值
+	area, _ := rectProps(10.8, 5.6) // 返回值周长被丢弃
+	fmt.Printf("Area %f ", area)
 }

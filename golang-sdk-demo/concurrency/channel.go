@@ -27,7 +27,7 @@ func main() {
 	pipeline := make(chan int, 10)
 	fmt.Printf("信道可缓冲 %d 个数据\n", cap(pipeline))
 	pipeline <- 1
-	fmt.Printf("信道中当前有 %d 个数据", len(pipeline))
+	fmt.Printf("信道中当前有 %d 个数据\n", len(pipeline))
 
 	// 缓冲信道
 	// 允许信道里存储一个或多个数据，这意味着，设置了缓冲区后，发送端和接收端可以处于异步的状态。

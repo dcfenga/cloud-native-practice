@@ -3,14 +3,13 @@ package main
 import "fmt"
 
 /*
+结构体是用户定义的类型，表示若干个字段（Field）的集合。有时应该把数据整合在一起，而不是让这些数据没有联系。这种情况下可以使用结构体。
 1. 声明结构体
-
-	type 结构体名 struct {
-	    属性名   属性类型
-	    属性名   属性类型
-	    ...
-	}
-
+type 结构体名 struct {
+    属性名   属性类型// 结构体声明：命名的结构体（Named Structure）
+	属性名   属性类型type Employee struct {
+	...
+}
 2. 定义方法
 使用组合函数的方式来定义结构体方法
 
@@ -19,42 +18,80 @@ import "fmt"
 (2)当方法的首字母为小写时，这个方法是Private，其他包是无法访问的。
 */
 
-// Profile 定义一个名为Profile 的结构体
-type Profile struct {
-	name   string
-	age    int
-	gender string
-	mother *Profile // 指针
-	father *Profile // 指针
+// 结构体声明：命名的结构体（Named Structure）
+type Employee struct {
+	firstName string
+	lastName  string
+	age       int
+	salary    int
 }
 
-// FmtProfile 定义一个与 Profile 的绑定的方法, 其中FmtProfile 是方法名，而(person Profile)：
-// 表示将 FmtProfile 方法与 Profile 的实例绑定。把 Profile 称为方法的接收者，
-// 而 person 表示实例本身，它相当于 Python 中的 self，在方法内可以使用
-// person.属性名 的方法来访问实例属性。
-// 以值做为方法接收者
-func (person Profile) FmtProfile() {
-	fmt.Printf("名字： %s\n", person.name)
-	fmt.Printf("年龄： %d\n", person.age)
-	fmt.Printf("性别： %s\n", person.gender)
+// 结构体声明: 简化写法，命名的结构体（Named Structure）
+type Employee2 struct {
+	firstName, lastName string
+	age, salary         int
 }
 
-// 以指针做为方法接收者, 下面几种情况应当直接使用指针做为方法的接收者：
-// 1.你需要在方法内部改变结构体内容的时候
-// 2.出于性能的问题，当结构体过大的时候
-// 3.虑到代码一致性，建议都使用指针做为接收者
-func (person *Profile) increase_Age() {
-	person.age += 1
+// 结构体声明: 匿名结构体，即声明结构体时不用声明一个新类型
+var employee struct {
+	firstName, lastName string
+	age                 int
+}
+
+// 结构体声明: 匿名字段, 创建结构体时，字段可以只有类型，而没有字段名。这样的字段称为匿名字段（Anonymous Field）。
+// 虽然匿名字段没有名称，但其实匿名字段的名称就默认为它的类型; Person 结构体有两个名为 string 和 int 的字段。
+type PersonS struct {
+	string
+	int
 }
 
 func main() {
-	// 实例化
-	myself := Profile{name: "小明", age: 30, gender: "male"}
+	//通过指定每个字段名的值，字段名的顺序不一定要与声明结构体类型时的顺序相同
+	emp1 := Employee{
+		firstName: "Sam",
+		age:       25,
+		salary:    500,
+		lastName:  "Anderson",
+	}
+	//省略了字段名，在这种情况下，就需要保证字段名的顺序与声明结构体时的顺序相同
+	emp2 := Employee{"Thomas", "Paul", 29, 800}
 
-	// 调用函数
-	myself.FmtProfile()
+	fmt.Println("Employee 1", emp1)
+	fmt.Println("Employee 2", emp2)
 
-	fmt.Printf("当前年龄：%d\n", myself.age)
-	myself.increase_Age()
-	fmt.Printf("当前年龄：%d", myself.age)
+	// 创建匿名结构体
+	// 之所以称这种结构体是匿名的，是因为它只是创建一个新的结构体变量 emp3，而没有定义任何结构体类型。
+	emp3 := struct {
+		firstName, lastName string
+		age, salary         int
+	}{
+		firstName: "Andreah",
+		lastName:  "Nikola",
+		age:       31,
+		salary:    5000,
+	}
+	fmt.Println("Employee 3", emp3)
+
+	// 结构体的零值（Zero Value）
+	var emp4 Employee               //zero valued structure
+	fmt.Println("Employee 4", emp4) //输出：Employee 4 {  0 0}
+	// 因为emp4没有初始化任何值，因此 firstName 和 lastName 赋值为 string 的零值（""），而 age 和 salary 赋值为 int 的零值（0）
+
+	// 可以为某些字段指定初始值，而忽略其他字段。这样，忽略的字段名会赋值为零值。
+	emp5 := Employee{
+		firstName: "John",
+		lastName:  "Paul",
+	}
+	fmt.Println("Employee 5", emp5) //输出：Employee 5 {John Paul 0 0}
+
+	// 匿名字段
+	p := PersonS{"Naveen", 50}
+	fmt.Println(p)
+	fmt.Println("=================")
+
+	// Person 结构体有两个名为 string 和 int 的字段
+	var p1 PersonS
+	p1.string = "FDC"
+	p1.int = 35
+	fmt.Println(p)
 }

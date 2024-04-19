@@ -24,12 +24,12 @@ func main() {
 	// 互斥锁定义方式1
 	var l1 *sync.Mutex
 	l1 = new(sync.Mutex)
-	fmt.Println(l1)
+	fmt.Println(l1) // 输出：&{0 0}
 	fmt.Println("-------------")
 
 	// 互斥锁定义方式2
 	l2 := &sync.Mutex{}
-	fmt.Println(l2)
+	fmt.Println(l2) // 输出：&{0 0}
 	fmt.Println("-------------")
 
 	// 互斥锁示例1
@@ -56,7 +56,7 @@ func main() {
 	go add2(&count2, &wg2, lock)
 
 	wg2.Wait()
-	fmt.Println("count的值为：", count2)
+	fmt.Println("count的值为：", count2 // 输出：count的值为： 3000
 	fmt.Println("-------------")
 
 	// 读写锁：RWMutex, 将程序对资源的访问分为读操作和写操作
@@ -69,12 +69,12 @@ func main() {
 	// 读写锁定义方式1
 	var l3 *sync.RWMutex
 	l3 = new(sync.RWMutex)
-	fmt.Println(l3)
+	fmt.Println(l3) // 输出：&{{0 0} 0 0 {{} 0} {{} 0}}
 	fmt.Println("-------------")
 
 	// 读写锁定义方式2
 	l4 := &sync.RWMutex{}
-	fmt.Println(l4)
+	fmt.Println(l4) // 输出：&{{0 0} 0 0 {{} 0} {{} 0}}
 	fmt.Println("-------------")
 
 	// 读写锁示例
@@ -101,6 +101,19 @@ func main() {
 	l5.Lock()
 	fmt.Println("程序退出...")
 	l5.Unlock()
+
+	/*输出：
+	第 3 个协程准备开始...
+	第 0 个协程准备开始...
+	第 1 个协程准备开始...
+	第 2 个协程准备开始...
+	准备释放写锁，读锁不再阻塞
+	第 2 个协程获得读锁, sleep 1s 后，释放锁
+	第 3 个协程获得读锁, sleep 1s 后，释放锁
+	第 1 个协程获得读锁, sleep 1s 后，释放锁
+	第 0 个协程获得读锁, sleep 1s 后，释放锁
+	程序退出...
+	*/
 }
 
 func add1(count *int, wg *sync.WaitGroup) {
